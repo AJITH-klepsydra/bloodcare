@@ -1,8 +1,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
-from .haversine import closest
+
 from bloodcare.interface.models import Recipient
+from .haversine import closest
+
+
 class DonorManager(models.Manager):
     def get_n_closest_loc(self,v,n):
         if not v and not v.blood_group:
