@@ -4,11 +4,11 @@ from phonenumber_field.modelfields import PhoneNumberField
 from .haversine import closest
 from bloodcare.interface.models import Recipient
 class DonorManager(models.Manager):
-    def get_n_closest_loc(self,v):
+    def get_n_closest_loc(self,v,n):
         if not v and not v.blood_group:
             return None
         data = Donor.objects.all().filter(blood_group = v.blood_group)
-        return closest(data,v,10)
+        return closest(data,v,n)
         
 
 

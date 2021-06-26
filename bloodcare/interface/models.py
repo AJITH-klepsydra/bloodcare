@@ -1,8 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
-
-
+from phonenumber_field.modelfields import PhoneNumberField
 # Create your models here.
 
 class Recipient(models.Model):
@@ -11,5 +10,9 @@ class Recipient(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     zip_code = models.IntegerField(null=True, blank=True)
     blood_group = models.CharField(max_length=100,default="O+")
+    twilio_id = models.CharField(max_length=50,editable=False,blank=True,null=True)
+    def save(self,*args,**kwargs):
+        super().save(*args,**kwargs)
     def __str__(self):
         return str(self.phone_no)
+
