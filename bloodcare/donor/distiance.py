@@ -8,13 +8,5 @@ def distance(lat1, lon1, lat2, lon2):
     return 12742 * asin(sqrt(hav))
 
 
-def closest(data, v):
-    return nsmallest(15, data, key=lambda p: distance(v['lat'], v['lon'], p['lat'], p['lon']))
-
-
-# tempDataList = [{'lat': 39.7612992, 'lon': -86.1519681},
-#                 {'lat': 39.762241, 'lon': -86.158436},
-#                 {'lat': 39.7622292, 'lon': -86.1578917}]
-#
-# v = {'lat': 39.7622290, 'lon': -86.1519750}
-# print(closest(tempDataList, v))
+def closest(data, v, n):
+    return nsmallest(n, data, key=lambda p: distance(v.latitude, v.longitude, p.latitude, p.longitude))

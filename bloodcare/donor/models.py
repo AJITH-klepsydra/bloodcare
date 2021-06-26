@@ -4,6 +4,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class DonorManager(models.Manager):
+    def get_n_closest_loc(self,n,v):
+
     pass
 
 
