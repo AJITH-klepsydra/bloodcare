@@ -29,11 +29,11 @@ class PhoneNumberView(APIView):
         if phone_no:
             otp = Recipient.generate_otp()
             # TODO Send OTP Via Celery
-            otp_object = Recipient.objects.get(mobile_no=phone_no)
+            otp_object = Recipient.objects.get(phone_no=phone_no)
             if otp_object:
                 otp_object.otp = otp
                 otp_object.count += 1
-            otp_object = Recipient(otp=otp, mobile_no=phone_no)
+            otp_object = Recipient(otp=otp, phone_no=phone_no)
             otp_object.last_used = now()
             otp_object.save()
             return Response({"message": "OTP Sent"}, 200)
