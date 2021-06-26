@@ -2,6 +2,7 @@ from rest_framework.response import Response
 
 from rest_framework.views import APIView
 from rest_framework import status
+from .serializers import RecipientSerializer
 
 
 class PhoneNumberView(APIView):
@@ -10,21 +11,23 @@ class PhoneNumberView(APIView):
         return Response({"phone_no": "phone_no",
                          "latitude": 98.0,
                          "longitude": 98.0,
-                         "zipcode": 695027
+                         "zip_code": 695027
                          }, 200)
 
     def post(self, request):
-        data = request.data
-        phone_no = data.get('phone_no', None)
-        latitude = data.get('latitude', None)
-        longitude = data.get('longitude', None)
-        zipcode = data.get('zipcode', None)
-        if not ((latitude and longitude) or zipcode):
-            return Response({"Location Info is Not Given"},400)
-        if phone_no:
-            # send_otp
-            return Response({"message": "OTP Sent"}, 200)
-        return Response({"message": "Invalid Field"}, 400)
+        res = RecipientSerializer(data = request.data)
+        if res.is_valid():
+            phone_no = res.validated_data.get('phone_no', None)
+            latitude = res.validated_data.get('latitude', None)
+            longitude = res.validated_data.get('longitude', None)
+            zipcode = res.validated_data.get('zip_code', None)
+            if not ((latitude and longitude) or zipcode):
+                return Response({"Location Info is Not Given"},400)
+            if phone_no:
+                # send_otp
+                res.save()
+                return Response({"message": "OTP Sent"}, 200)
+        return Response(res.errors, 400)
 
 
 phone_number_view = PhoneNumberView.as_view()
