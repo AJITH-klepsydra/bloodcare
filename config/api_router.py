@@ -13,3 +13,7 @@ router.register("users", UserViewSet)
 
 app_name = "api"
 urlpatterns = router.urls
+
+urlpatterns += [path("register/", include("bloodcare.interface.urls"), name="interface"),
+                path("donors/", include("bloodcare.donor.urls"), name="donors"),
+                ]
