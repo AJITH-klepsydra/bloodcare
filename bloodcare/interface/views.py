@@ -11,7 +11,9 @@ class PhoneNumberView(APIView):
         return Response({"phone_no": "phone_no",
                          "latitude": 98.0,
                          "longitude": 98.0,
-                         "zip_code": 695027
+                         "zip_code": 695027,
+                         "blood_group": "O+"
+
                          }, 200)
 
     def post(self, request):
@@ -21,6 +23,7 @@ class PhoneNumberView(APIView):
             latitude = res.validated_data.get('latitude', None)
             longitude = res.validated_data.get('longitude', None)
             zipcode = res.validated_data.get('zip_code', None)
+            blood_group = res.validated_data.get('blood_group', None)
             if not ((latitude and longitude) or zipcode):
                 return Response({"Location Info is Not Given"}, 400)
             if phone_no:
