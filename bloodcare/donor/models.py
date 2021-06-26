@@ -17,7 +17,7 @@ class Donor(models.Model):
     subdistrict = models.CharField(max_length=200, null=True, blank=True)
     last_donated = models.DateTimeField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
-    blood_group = models.CharField(max_length=5)
+    blood_group = models.CharField(max_length=100)
     date_of_joined = models.DateTimeField(auto_now_add=True)
     objects = DonorManager()
     latitude = models.FloatField()
