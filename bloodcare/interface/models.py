@@ -10,3 +10,6 @@ class Recipient(models.Model):
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     zip_code = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.phone_no)
