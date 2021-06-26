@@ -8,13 +8,9 @@ from rest_framework.views import APIView
 from bloodcare.donor.serializers import Donor, DonorSerializer
 from .models import Recipient
 from .tasks import auto_call_trigger
-<<<<<<< HEAD
 from django.utils.timezone import now
 from bloodcare.donor.decorators import is_authenticated
-=======
 
-
->>>>>>> 396e12976100125cf8aa4ac1d3b5a693c2e64944
 class PhoneNumberView(APIView):
 
     def get(self, request):
