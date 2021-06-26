@@ -20,7 +20,7 @@ class Donor(models.Model):
     blood_group = models.CharField(max_length=5)
     date_of_joined = models.DateTimeField(auto_now_add=True)
     objects = DonorManager()
-    lattitude = models.FloatField()
+    latitude = models.FloatField()
     longitude = models.FloatField()
 
     def __str__(self) -> str:
