@@ -78,7 +78,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "bloodcare.users.apps.UsersConfig",
     "bloodcare.interface",
-    "bloodcare.donor"
+    "bloodcare.donor",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
