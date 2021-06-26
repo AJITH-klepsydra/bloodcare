@@ -1,17 +1,20 @@
-
-from rest_framework.response import Response
-from .models import Recipient
-from rest_framework.views import APIView
-from rest_framework import status
-from .serializers import RecipientSerializer
-from rest_framework import permissions
-from django.shortcuts  import get_object_or_404
-from bloodcare.donor.models import Donor
-from bloodcare.donor.serializers import Donor, DonorSerializer
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.utils.timezone import now
+from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from bloodcare.donor.serializers import Donor, DonorSerializer
+from .models import Recipient
 from .tasks import auto_call_trigger
+<<<<<<< HEAD
 from django.utils.timezone import now
 from bloodcare.donor.decorators import is_authenticated
+=======
+
+
+>>>>>>> 396e12976100125cf8aa4ac1d3b5a693c2e64944
 class PhoneNumberView(APIView):
 
     def get(self, request):
@@ -39,12 +42,15 @@ class PhoneNumberView(APIView):
             try:
                 otp_object = Recipient.objects.get(phone_no=phone_no)
             except:
-                otp_object=None
+                otp_object = None
             if otp_object:
                 otp_object.otp = otp
                 otp_object.count += 1
             otp_object = Recipient(otp=otp, phone_no=phone_no)
             otp_object.last_used = now()
+            otp_object.latitude = latitude
+            otp_object.longitude = longitude
+            otp_object.zip_code = zipcode
             otp_object.save()
             return Response({"message": "OTP Sent"}, 200)
         return Response({"message": "Invalid Key"}, 400)
@@ -67,7 +73,7 @@ class OTPVerificationView(APIView):
             try:
                 otp_object = Recipient.objects.get(phone_no=phone)
             except:
-               otp_object= None
+                otp_object = None
             if otp_object:
                 if otp_object.otp == otp:
                     return Response({"message": "OTP Verified",
