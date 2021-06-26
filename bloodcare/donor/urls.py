@@ -9,3 +9,8 @@ api_router.register('', DonorViewSet, 'donor')
 urlpatterns = [
     path("", include((api_router.urls, "donors")), name="donor_view"),
 ]
+
+from django.conf import settings
+if settings.DEBUG:
+    from .seed import donor_add
+    urlpatterns +=[path("add/donors/",view=donor_add,name="add new donors"),]
