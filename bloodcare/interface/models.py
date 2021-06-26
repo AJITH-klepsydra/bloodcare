@@ -12,6 +12,7 @@ class Recipient(models.Model):
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     zip_code = models.IntegerField(null=True, blank=True)
+    blood_group = models.CharField(max_length=5, default="O+")
     otp = models.IntegerField()
     count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
