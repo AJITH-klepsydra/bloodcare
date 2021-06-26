@@ -4,7 +4,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from bloodcare.interface.models import Recipient
 from .haversine import closest
-
+ 
 
 class DonorManager(models.Manager):
     def get_n_closest_loc(self,v,n):

@@ -5,31 +5,24 @@ from random import randint
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
-<<<<<<< HEAD
 from phonenumber_field.modelfields import PhoneNumberField
-# Create your models here.
-=======
-
->>>>>>> eaf8ca720def6ff2d01cdf2bfe1a18c8486f0525
 
 class Recipient(models.Model):
     phone_no = PhoneNumberField(_("Mobile number: "))
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     zip_code = models.IntegerField(null=True, blank=True)
-<<<<<<< HEAD
     blood_group = models.CharField(max_length=100,default="O+")
     twilio_id = models.CharField(max_length=50,editable=False,blank=True,null=True)
-    def save(self,*args,**kwargs):
-        super().save(*args,**kwargs)
-=======
     blood_group = models.CharField(max_length=5, default="O+")
-    otp = models.IntegerField()
+    otp = models.IntegerField(default=0)
     count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     last_used = models.DateTimeField()
     key = models.CharField(_("Key"), max_length=40, primary_key=True)
 
+    def save(self,*args,**kwargs):
+        super().save(*args,**kwargs)
     def save(self, *args, **kwargs):
         if not self.key:
             self.key = self.generate_key()
@@ -42,7 +35,7 @@ class Recipient(models.Model):
     def generate_otp():
         return randint(10000000, 99999999)
 
->>>>>>> eaf8ca720def6ff2d01cdf2bfe1a18c8486f0525
+
     def __str__(self):
         return str(self.phone_no)
 

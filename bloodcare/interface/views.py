@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 from rest_framework.response import Response
 from .models import Recipient
@@ -37,7 +36,10 @@ class PhoneNumberView(APIView):
         if phone_no:
             otp = Recipient.generate_otp()
             # TODO Send OTP Via Celery
-            otp_object = Recipient.objects.get(phone_no=phone_no)
+            try:
+                otp_object = Recipient.objects.get(phone_no=phone_no)
+            except:
+                otp_object=None
             if otp_object:
                 otp_object.otp = otp
                 otp_object.count += 1
@@ -62,7 +64,10 @@ class OTPVerificationView(APIView):
         otp = data.get('otp', None)
         phone = data.get('phone_no', None)
         if otp:
-            otp_object = Recipient.objects.get(phone_no=phone)
+            try:
+                otp_object = Recipient.objects.get(phone_no=phone)
+            except:
+               otp_object= None
             if otp_object:
                 if otp_object.otp == otp:
                     return Response({"message": "OTP Verified",
