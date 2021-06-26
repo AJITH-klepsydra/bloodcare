@@ -78,7 +78,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "bloodcare.users.apps.UsersConfig",
     "bloodcare.interface",
-    "bloodcare.donor"
+    "bloodcare.donor",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -301,7 +301,7 @@ SOCIALACCOUNT_ADAPTER = "bloodcare.users.adapters.SocialAccountAdapter"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        "bloodcare.users.adapters.OTPTokenAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
 }
