@@ -15,14 +15,14 @@ class PhoneNumberView(APIView):
                          }, 200)
 
     def post(self, request):
-        res = RecipientSerializer(data = request.data)
+        res = RecipientSerializer(data=request.data)
         if res.is_valid():
             phone_no = res.validated_data.get('phone_no', None)
             latitude = res.validated_data.get('latitude', None)
             longitude = res.validated_data.get('longitude', None)
             zipcode = res.validated_data.get('zip_code', None)
             if not ((latitude and longitude) or zipcode):
-                return Response({"Location Info is Not Given"},400)
+                return Response({"Location Info is Not Given"}, 400)
             if phone_no:
                 # send_otp
                 res.save()

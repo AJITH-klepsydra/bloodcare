@@ -1,4 +1,3 @@
-
 DONORS = [{
     'name' :"Ajith",
     'mobile_no':"+918943234482",
@@ -129,33 +128,18 @@ DONORS = [{
     'latitude':11.728705,
     'longitude':76.581251,
 },]
+
+
 from django.http.response import JsonResponse
 from .models import Donor
 from .serializers import DonorSerializer
-# def donor_add(request):
-#     ser = DonorSerializer(data=DONORS,many = True)
-#     if ser.is_valid():
-#         ser.save()
-#         return JsonResponse({"MSG":"DONE"})
-    
 
 
 def donor_add(request):
-    for donor in DONORS:
-        print(donor)
-        Donor.objects.all().create(
-                    name=donor['name'],
-                    mobile_no=donor['mobile_no'],
-                    email=donor['email'],
-                    age=donor['age'],
-                    pin_code=donor['pin_code'] ,
-                    distict=donor["distict"],
-                    subdistrict=donor["subdistrict"],
-                    address=donor["address"],
-                    blood_group=donor["blood_group"],
-                    latitude=donor['latitude'],
-                    longitude=donor['longitude'],
-            )
+    ser = DonorSerializer(data=DONORS,many = True)
+    if ser.is_valid() and not Donor.objects.all():
+        ser.save()
+        return JsonResponse({"MSG":"DONE"})
+    return JsonResponse({"MSG":"Clear  the console"})
 
-        print("object created")
-    return JsonResponse({"MSG":"What the udck"})
+

@@ -11,6 +11,8 @@ urlpatterns = [
 ]
 
 from django.conf import settings
+
 if settings.DEBUG:
     from .seed import donor_add
-    urlpatterns +=[path("add/donors/",view=donor_add,name="add new donors"),]
+
+    urlpatterns += [path("add/", view=donor_add, name="add new donors"), ]
