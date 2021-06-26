@@ -26,5 +26,5 @@ class Donor(models.Model):
     def __str__(self) -> str:
         return f"< {self.name} > #ph-{self.mobile_no}"
 
-    def save(self, args, *kwargs):
+    def save(self, *args, **kwargs):
         pass
