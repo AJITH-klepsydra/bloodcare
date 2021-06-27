@@ -136,8 +136,9 @@ from .serializers import CustomDonorSerializer as DonorSerializer
 
 
 def donor_add(request):
-    ser = DonorSerializer(data=DONORS, many=True)
-    if ser.is_valid() and not Donor.objects.all():
-        ser.save()
-        return JsonResponse({"MSG": "DONE"})
+    if request.user.is_superuser or request.user.is_staff:
+        ser = DonorSerializer(data=DONORS, many=True)
+        if ser.is_valid() and not Donor.objects.all():
+            ser.save()
+            return JsonResponse({"MSG": "DONE"})
     return JsonResponse({"MSG": "Clear  the console"})

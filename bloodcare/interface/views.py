@@ -60,7 +60,11 @@ class PhoneNumberView(APIView):
             otp = Recipient.generate_otp()
             # TODO Send OTP Via Celery
             try:
+                print("\n\n\n\n")
+                print(phone_no)
                 otp_object = Recipient.objects.get(phone_no=phone_no)
+                print(otp_object)
+                print("\n\n\n\n")
             except:
                 otp_object = None
             if otp_object:

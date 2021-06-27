@@ -12,7 +12,7 @@ def is_authenticated(func):
             return Response({"info": "UnAuthenticated"}, status=401)
         try:
             request.user = Recipient.objects.get(key=token)
-        except:
+        except Exception:
             return Response({"info": "UnAuthenticated"}, status=401)
         return func(obj, request, *args, **kwargs)
 
