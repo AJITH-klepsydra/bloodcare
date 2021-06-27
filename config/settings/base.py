@@ -73,6 +73,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     'phonenumber_field',
+    'drf_yasg',
 ]
 
 LOCAL_APPS = [
