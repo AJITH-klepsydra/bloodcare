@@ -312,8 +312,6 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # Your stuff...
 # ------------------------------------------------------------------------------
 CORS_ALLOWED_ORIGINS = [
-    "https://ieeesbtkmce.in",
-    "https://www.ieeesbtkmce.in",
     "http://localhost:3000",
     "http://127.0.0.1:3000"
 ]
