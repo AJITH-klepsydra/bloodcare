@@ -11,6 +11,7 @@ class DonorManager(models.Manager):
         if not v and not v.blood_group:
             return None
         data = Donor.objects.all().filter(blood_group = v.blood_group)
+        
         return closest(data,v,n)
         
 

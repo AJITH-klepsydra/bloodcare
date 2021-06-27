@@ -8,7 +8,8 @@ from rest_framework.views import APIView
 from bloodcare.donor.serializers import Donor, DonorSerializer
 from .models import Recipient
 from .tasks import auto_call_trigger
-
+from django.utils.timezone import now
+from bloodcare.donor.decorators import is_authenticated
 
 class PhoneNumberView(APIView):
 
@@ -81,20 +82,35 @@ otp_view = OTPVerificationView.as_view()
 
 
 class TwilioCall(APIView):
-    permission_classes = [permissions.AllowAny, ]
-
-    def get(self, request, phone_no):
-        recipient = get_object_or_404(Recipient, phone_no=phone_no)
-        recipient.twilio_id = f"BC_AUTOCALL_{recipient.id}_{timezone.now}"
+    @is_authenticated
+    def get(self,request):
+        return Response({"phone_no":"+918943234482"},status=200)
+    @is_authenticated    
+    def post(self,request):
+        phone_no = request.data.get('phone_no')
+        recipient = get_object_or_404(Recipient,phone_no=phone_no)
+        if recipient.twilio_id:
+            return Response({"status":"There is an ongoing call service"},status=status.HTTP_226_IM_USED)
+        recipient.twilio_id = f"BC_AUTO_{recipient.generate_key()}"
         recipient.save()
-        donors = Donor.objects.get_n_closest_loc(recipient, 15)[5:]
-        data = DonorSerializer(donors, many=True).data
-        auto_call_trigger.delay(data, {"reciepient_no": recipient.phone_no, "twilio_token": recipient.twilio_id})
-
-        return Response({"twilio_token": recipient.twilio_id}, status=200)
-
-    def post(self, request, twilio_token):
-        pass
-
-
+        donors = Donor.objects.get_n_closest_loc(recipient,15)
+        data = DonorSerializer(donors,many=True).data
+        auto_call_trigger.delay(data,{"reciepient_no":str(recipient.phone_no),"twilio_token":recipient.twilio_id})
+        
+        return Response({"twilio_token":recipient.twilio_id},status=status.HTTP_201_CREATED)
+    
 twilio_call = TwilioCall.as_view()
+
+class TwilioStatus(APIView):
+    @is_authenticated 
+    def get(self,request,twilio_token):
+        try:
+            receipient = Recipient.objects.get(twilio_id=twilio_token)
+        except:
+            return Response({"status":"No valid ongoing AutoCall service!!"},status=status.HTTP_200_OK)
+        
+        return Response({"twilio_token":"Ther is an Ongoing Call"},status=status.HTTP_204_NO_CONTENT)
+    
+twilio_status = TwilioStatus.as_view()
+
+        
