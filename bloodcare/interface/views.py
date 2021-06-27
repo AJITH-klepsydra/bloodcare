@@ -39,13 +39,13 @@ class PhoneNumberView(APIView):
 
     """
 
-    def get(self, request):
-        return Response({"phone_no": "phone_no",
-                         "latitude": 98.0,
-                         "longitude": 98.0,
-                         "zip_code": 695027,
-                         "blood_group": "O+"
-                         }, 200)
+    # def get(self, request):
+    #     return Response({"phone_no": "phone_no",
+    #                      "latitude": 98.0,
+    #                      "longitude": 98.0,
+    #                      "zip_code": 695027,
+    #                      "blood_group": "O+"
+    #                      }, 200)
 
     def post(self, request):
         ser = RecipientSerializer(data = request.data)
