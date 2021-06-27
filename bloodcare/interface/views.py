@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from bloodcare.donor.decorators import is_authenticated
 from bloodcare.donor.serializers import Donor, DonorSerializer
 from .models import Recipient
+from .serializers import RecipientSerializer
 from .tasks import auto_call_trigger
 
 
@@ -47,38 +48,42 @@ class PhoneNumberView(APIView):
                          }, 200)
 
     def post(self, request):
-        phone_no = request.data.get('phone_no', None)
-        latitude = request.data.get('latitude', None)
-        longitude = request.data.get('longitude', None)
-        zipcode = request.data.get('zip_code', None)
-        blood_group = request.data.get('blood_group', None)
-        if not blood_group:
-            return Response({"message": "Invalid Blood Group"}, 400)
-        if not ((latitude and longitude) or zipcode):
-            return Response({"Location Info is Not Given"}, 400)
+        ser = RecipientSerializer(data = request.data)
+        if ser.is_valid():
+            phone_no = ser.initial_data.get('phone_no', None)
+            latitude = ser.initial_data.get('latitude', None)
+            longitude = ser.initial_data.get('longitude', None)
+            zipcode = ser.initial_data.get('zip_code', None)
+            blood_group = ser.initial_data.get('blood_group', None)
+            if not blood_group:
+                return Response({"message": "Invalid Blood Group"}, 400)
+            if not ((latitude and longitude) or zipcode):
+                return Response({"Location Info is Not Given"}, 400)
 
-        if phone_no:
-            otp = Recipient.generate_otp()
-            # TODO Send OTP Via Celery
-            try:
-                print("\n\n\n\n")
-                print(phone_no)
-                otp_object = Recipient.objects.get(phone_no=phone_no)
-                print(otp_object)
-                print("\n\n\n\n")
-            except:
-                otp_object = None
-            if otp_object:
-                otp_object.otp = otp
-                otp_object.count += 1
-            otp_object = Recipient(otp=otp, phone_no=phone_no)
-            otp_object.last_used = now()
-            otp_object.latitude = latitude
-            otp_object.longitude = longitude
-            otp_object.zip_code = zipcode
-            otp_object.save()
-            return Response({"message": "OTP Sent"}, 200)
-        return Response({"message": "Invalid Key"}, 400)
+            if phone_no:
+                otp = Recipient.generate_otp()
+                # TODO Send OTP Via Celery
+                try:
+                    print("\n\n\n\n")
+                    print(phone_no)
+                    otp_object = Recipient.objects.get(phone_no=phone_no)
+                    print(otp_object)
+                    print("\n\n\n\n")
+                except:
+                    otp_object = None
+                if otp_object:
+                    otp_object.otp = otp
+                    otp_object.count += 1
+                else:
+                    otp_object = Recipient(otp=otp, phone_no=phone_no)
+                otp_object.last_used = now()
+                otp_object.latitude = latitude
+                otp_object.longitude = longitude
+                otp_object.zip_code = zipcode
+                otp_object.save()
+                return Response({"message": "OTP Sent"}, 200)
+            return Response({"message": "Invalid Key"}, 400)
+        return Response(ser.errors, 401)
 
 
 phone_number_view = PhoneNumberView.as_view()
