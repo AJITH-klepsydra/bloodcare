@@ -6,6 +6,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework.views import APIView
 from .serializers import DonorSerializer
+from rest_framework import permissions
 
 
 class DonorViewSet(ListModelMixin, GenericViewSet):
