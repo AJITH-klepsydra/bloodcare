@@ -146,8 +146,6 @@ class TwilioCall(APIView):
     def post(self, request):
         phone_no = request.data.get('phone_no')
         recipient = get_object_or_404(Recipient, phone_no=phone_no)
-        if recipient.twilio_id:
-            return Response({"status": "There is an ongoing call service"}, status=status.HTTP_226_IM_USED)
         recipient.twilio_id = f"BC_AUTO_{recipient.generate_key()}"
         recipient.save()
         donors = Donor.objects.get_n_closest_loc(recipient, 15)
