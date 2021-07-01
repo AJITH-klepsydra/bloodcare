@@ -39,16 +39,16 @@ class PhoneNumberView(APIView):
 
     """
 
-    # def get(self, request):
-    #     return Response({"phone_no": "phone_no",
-    #                      "latitude": 98.0,
-    #                      "longitude": 98.0,
-    #                      "zip_code": 695027,
-    #                      "blood_group": "O+"
-    #                      }, 200)
+    def get(self, request):
+        return Response({"phone_no": "phone_no",
+                         "latitude": 98.0,
+                         "longitude": 98.0,
+                         "zip_code": 695027,
+                         "blood_group": "O+"
+                         }, 200)
 
     def post(self, request):
-        ser = RecipientSerializer(data = request.data)
+        ser = RecipientSerializer(data=request.data)
         if ser.is_valid():
             phone_no = ser.initial_data.get('phone_no', None)
             latitude = ser.initial_data.get('latitude', None)
@@ -105,7 +105,7 @@ class OTPVerificationView(APIView):
 
        STATUS CODE
 
-       200 - Send Token if OTP is Valid
+       200 - Send Token if OTP is Valid<br>
        400 - OTP Invalid
 
 

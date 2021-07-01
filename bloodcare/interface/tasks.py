@@ -8,6 +8,7 @@ import time
 def auto_call_trigger(data,receipient):
     """Triggering twilio api to call certain person"""
     for donor in data:
+
         print(donor,receipient)
         time.sleep(10)
         # TODO: Twilio call integration
