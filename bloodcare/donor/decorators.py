@@ -7,7 +7,9 @@ def is_authenticated(func):
     def inner(obj, request, *args, **kwargs):
         if request.user.is_superuser or request.user.is_staff:
             return func(obj, request, *args, **kwargs)
+        
         token = request.headers.get('Authorization', None)
+        
         if not token:
             return Response({"message": "UnAuthenticated"}, status=401)
         try:

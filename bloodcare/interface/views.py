@@ -153,25 +153,31 @@ class TwilioCall(APIView):
         recipient.save()
         donors = Donor.objects.get_n_closest_loc(recipient, 15)
         data = DonorSerializer(donors, many=True).data
-        auto_call_trigger.delay(data, {"recipient": recipient, "twilio_token": recipient.twilio_id})
+        auto_call_trigger.delay(data, {"recipient": recipient.pk, "twilio_token": recipient.twilio_id})
 
         return Response({"twilio_token": recipient.twilio_id}, status=status.HTTP_201_CREATED)
 
 
 twilio_call = TwilioCall.as_view()
 
-
+from bloodcare.links.serializer import StatSerializer
 class TwilioStatus(APIView):
     @is_authenticated
-    def get(self, request, twilio_token):
+    def get(self, request, phone_no):
         try:
-            recipient = Recipient.objects.get(twilio_id=twilio_token)
+            
+            recipient = Recipient.objects.get(phone_no=phone_no)
+            stat = Status.objects.filter(status=recipient)
+            data = StatSerializer(stat,many=True).data
+            if not recipient.twilio_id:
+                return Response({"status": "No valid ongoing AutoCall service!!","donors":data}, status=status.HTTP_300_MULTIPLE_CHOICES)
+            else:
+               
+               return Response({"status": "Ongoing Call!!","donors":data}, status=status.HTTP_200_OK)
         except:
-            return Response({"status": "No valid ongoing AutoCall service!!"}, status=200)
+            return Response({"status": "No valid ongoing AutoCall service!!"}, status=status.HTTP_204_NO_CONTENT)
 
-        stat = Status.objects.filter(status=recipient)
-
-        return Response({"status": stat}, status=status.HTTP_204_NO_CONTENT)
+       
 
 
 twilio_status = TwilioStatus.as_view()

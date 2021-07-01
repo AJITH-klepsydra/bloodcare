@@ -9,7 +9,7 @@ from .tasks import send_message
 
 class LinkManageView(APIView):
     def get(self, request, link):
-        obj = get_object_or_404(Link, link)
+        obj = get_object_or_404(Link, slug=link)
         obj.status = "Donor Visited the Website"
 
         status = Status(status=obj.recipient, detail=f"{obj.donor.name} Accepted")
@@ -17,7 +17,7 @@ class LinkManageView(APIView):
         obj.save()
 
         message = f"Call Me Bro {obj.donor.mobile_no}, I will give you damn blood"
-        send_message.delay(obj.recipient.phone_no, message)
+        send_message.delay(str(obj.recipient.phone_no), message)
         return Response({"message": "Successfully Marked"}, 200)
 
 

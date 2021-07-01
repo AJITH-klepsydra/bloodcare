@@ -8,5 +8,5 @@ urlpatterns = [
     path('', phone_number_view, name='registration', ),
     path('valid/', otp_view, name='otp', ),
     path('autocall/', twilio_call, name='twilio_call', ),
-    path('autocall/status/<str:twilio_token>/', twilio_status, name='twilio_status', ),
+    path('autocall/status/<str:phone_no>/', twilio_status, name='twilio_status', ),
 ]
