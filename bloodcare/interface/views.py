@@ -6,6 +6,8 @@ from rest_framework.views import APIView
 
 from bloodcare.donor.decorators import is_authenticated
 from bloodcare.donor.serializers import Donor, DonorSerializer
+from bloodcare.links.models import Status
+from bloodcare.links.tasks import send_message
 from .models import Recipient
 from .serializers import RecipientSerializer
 from .tasks import auto_call_trigger
@@ -62,7 +64,8 @@ class PhoneNumberView(APIView):
 
             if phone_no:
                 otp = Recipient.generate_otp()
-                # TODO Send OTP Via Celery
+                message = f'{otp}'
+                send_message.delay(phone_no, message)
                 try:
                     otp_object = Recipient.objects.get(phone_no=phone_no)
                 except:
@@ -150,7 +153,7 @@ class TwilioCall(APIView):
         recipient.save()
         donors = Donor.objects.get_n_closest_loc(recipient, 15)
         data = DonorSerializer(donors, many=True).data
-        auto_call_trigger.delay(data, {"reciepient_no": str(recipient.phone_no), "twilio_token": recipient.twilio_id})
+        auto_call_trigger.delay(data, {"recipient": recipient, "twilio_token": recipient.twilio_id})
 
         return Response({"twilio_token": recipient.twilio_id}, status=status.HTTP_201_CREATED)
 
@@ -162,11 +165,13 @@ class TwilioStatus(APIView):
     @is_authenticated
     def get(self, request, twilio_token):
         try:
-            receipient = Recipient.objects.get(twilio_id=twilio_token)
+            recipient = Recipient.objects.get(twilio_id=twilio_token)
         except:
-            return Response({"status": "No valid ongoing AutoCall service!!"}, status=status.HTTP_200_OK)
+            return Response({"status": "No valid ongoing AutoCall service!!"}, status=200)
 
-        return Response({"twilio_token": "Ther is an Ongoing Call"}, status=status.HTTP_204_NO_CONTENT)
+        stat = Status.objects.filter(status=recipient)
+
+        return Response({"status": stat}, status=status.HTTP_204_NO_CONTENT)
 
 
 twilio_status = TwilioStatus.as_view()

@@ -80,6 +80,7 @@ LOCAL_APPS = [
     "bloodcare.users.apps.UsersConfig",
     "bloodcare.interface",
     "bloodcare.donor",
+    "bloodcare.links"
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -312,3 +313,6 @@ REST_FRAMEWORK = {
 # Your stuff...
 # ------------------------------------------------------------------------------
 CORS_ORIGIN_ALLOW_ALL = True
+TWILIO_ACCOUNT_SID = 'AC0a0a6a7b46537bcb13841a110d83f4af'
+TWILIO_AUTH_TOKEN = '21d5d92f0c7dcaa07d1c8725f44e755b'
+FROM = '+18175876724'
