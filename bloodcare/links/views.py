@@ -15,7 +15,6 @@ class LinkManageView(APIView):
             status = Status(status=obj.recipient, detail=f"{obj.donor.name}")
             status.save()
             obj.save()
-
             message = f"Call Me Bro {obj.donor.mobile_no}, I will give you damn blood"
             send_message.delay(str(obj.recipient.phone_no), message)
             return Response({"message": f"Successfully Marked. Contact : {obj.recipient.phone_no} for donating {obj.recipient.blood_group} Blood"}, 200)
