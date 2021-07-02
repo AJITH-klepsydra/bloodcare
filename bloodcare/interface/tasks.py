@@ -16,8 +16,8 @@ def auto_call_trigger(data, recipient):
     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
     for donor in data:
     
-            call_message = f"DONT TRY TO PLAY WITH ME NIKESH "
-            call = client.calls.create(twiml=f'<Response><Say>{call_message}</Say></Response>',
+            call_message = f"this is an important message f"
+            call = client.calls.create(twiml=f'<Response><Play loop="2">https://russet-otter-8490.twil.io/assets/bloodcare.mp3</Play></Response>',
                                     to=donor['mobile_no'],
                                     from_=settings.FROM)
             rec_obj = Recipient.objects.get(pk=recipient["recipient"])
@@ -25,7 +25,7 @@ def auto_call_trigger(data, recipient):
             link = Link(recipient=rec_obj, donor=don_obj,)
             link.save()
 
-            text_message = f"127.0.0.1:8000/links/{link.slug}"
+            text_message = f"127.0.0.1:3000/links/{link.slug}"
 
             message = client.messages.create(
                 body=text_message,
