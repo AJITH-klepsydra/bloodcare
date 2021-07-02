@@ -171,7 +171,7 @@ class TwilioStatus(APIView):
             stat = Status.objects.filter(status=recipient)
             data = StatSerializer(stat,many=True).data
             if not recipient.twilio_id:
-                return Response({"status": "No valid ongoing AutoCall service!!","donors":data}, status=status.HTTP_300_MULTIPLE_CHOICES)
+                return Response({"status": "No valid ongoing AutoCall service!!","donors":data}, status=200)
             else:
                
                return Response({"status": "Ongoing Call!!","donors":data}, status=status.HTTP_200_OK)
