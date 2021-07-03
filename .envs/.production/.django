@@ -4,7 +4,7 @@
 DJANGO_SETTINGS_MODULE=config.settings.production
 DJANGO_SECRET_KEY=XgyD3gC5WzyBxbjgJOQrEpNCbdrjcCGWhhJvvk2nlAJlBNLrtYEZxCucKYi6jsTx
 DJANGO_ADMIN_URL=ufZviVmC6KL861mPKahEi1QcaiR1Irp3/
-DJANGO_ALLOWED_HOSTS=.apibloodcare.csitkmce.tech
+DJANGO_ALLOWED_HOSTS=.valorant.acm-ascendo.tech
 
 # Security
 # ------------------------------------------------------------------------------
