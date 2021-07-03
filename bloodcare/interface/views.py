@@ -79,6 +79,7 @@ class PhoneNumberView(APIView):
                 otp_object.latitude = latitude
                 otp_object.longitude = longitude
                 otp_object.zip_code = zipcode
+                otp_object.blood_group = blood_group
                 otp_object.save()
                 return Response({"message": "OTP Sent"}, 200)
             return Response({"message": "Invalid Key"}, 400)
@@ -166,19 +167,19 @@ class TwilioStatus(APIView):
     @is_authenticated
     def get(self, request, phone_no):
         try:
-            
+
             recipient = Recipient.objects.get(phone_no=phone_no)
             stat = Status.objects.filter(status=recipient)
             data = StatSerializer(stat,many=True).data
             if not recipient.twilio_id:
                 return Response({"status": "No valid ongoing AutoCall service!!","donors":data}, status=200)
             else:
-               
+
                return Response({"status": "Ongoing Call!!","donors":data}, status=status.HTTP_200_OK)
         except:
             return Response({"status": "No valid ongoing AutoCall service!!"}, status=status.HTTP_204_NO_CONTENT)
 
-       
+
 
 
 twilio_status = TwilioStatus.as_view()
