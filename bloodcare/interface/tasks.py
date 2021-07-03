@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.sites.models import Site
 from twilio.rest import Client
 
 from bloodcare.donor.models import Donor
@@ -25,9 +24,7 @@ def auto_call_trigger(data, recipient):
             link = Link(recipient=rec_obj, donor=don_obj, )
             link.save()
 
-            site = Site.objects.get(id=2)
-            if site:
-                text_message = f"{site.domain}/links/{link.slug}"
+            text_message = f"blood.csitkmce.tech/links/{link.slug}"
 
             message = client.messages.create(
                 body=text_message,
